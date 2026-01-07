@@ -1,0 +1,24 @@
+name: Send Sales Report (City Based)
+
+on:
+  workflow_dispatch:
+    inputs:
+      city:
+        description: "Hangi şehir satış raporu istiyor?"
+        required: true
+        type: choice
+        options:
+          - ankara
+          - izmir
+          - istanbul
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Apps Script endpoint
+        run: |
+          echo "City selected: ${{ github.event.inputs.city }}"
+          curl -s \
+          "https://script.google.com/macros/s/AKfycbwhSERzLIys9EXFeP5dAbs3Iy7NwHacZ1T2vpqgu5lvstCb_YVRYQPJC4DBTha7x80Acw/exec?city=${{ github.event.inputs.city }}&token=${{ secrets.SHEET_TOKEN }}"
